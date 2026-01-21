@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import User from "./models/User.js";
 import cors from "cors";
-
+import bcrypt from "bcrypt";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -52,13 +52,16 @@ app.post("/signup", async (req, res) => {
     });
   }
 
+  const salt = bcrypt.genSaltSync(10);
+  const encryptedPassword = bcrypt.hashSync(password, salt);
+
   const newUser = new User({
     name,
     email,
     mobile,
     city,
     country,
-    password,
+    password : encryptedPassword,
   });
 
   const exsistingUser = await User.findOne({ email });
@@ -87,18 +90,29 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const exsistingUser = await User.findOne({ email, password });
+  const exsistingUser = await User.findOne({ email});
 
   if (!exsistingUser) {
     return res.json({
       status: false,
-      message: "Invalid email or password.",
+      message: "Account with this email is not exsists",
     });
+  }
+
+  const isCorrectPassword = bcrypt.compareSync(password, exsistingUser.password);
+  
+  exsistingUser.password = undefined;
+
+  if(isCorrectPassword) {
+    return res.json ({
+      status : true,
+      message : "Login Successfully",
+    })
   } else {
-    res.json({
-      status: true,
-      message: "Login Successfully..",
-    });
+    return res.json ({
+      status : false,
+      message  : "Invalid Email or Password",
+    })
   }
 });
 
