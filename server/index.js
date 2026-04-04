@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import User from "./models/User.js";
+import Tours from "./models/Tours.js";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import bcrypt from "bcrypt";
@@ -12,25 +13,23 @@ app.use(cors());
 
 const Port = process.env.PORT;
 
-
-const verifyjwt = (req,res, next) => {
-
-  const {authorization} = req.headers;
+const verifyjwt = (req, res, next) => {
+  const { authorization } = req.headers;
   const token = authorization && authorization.split(" ")[1];
   console.log(token);
 
-  
-  try{
-  const decoded = jwt.verify(token,process.env.JWT_SECRET);
-  next();
-  }catch(error){
-    return res.json({
-      status:false,
-      message:"Invalid or Missing Token",
-    })
-  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-}
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: "Invalid or Missing Token",
+    });
+  }
+};
 
 app.get("/", (req, res) => {
   res.json({
@@ -46,13 +45,32 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.get("/api_v1", verifyjwt, (req , res) => {
-   return res.json({
-    status:true,
-    message:"API v1 is working",
-  })
+app.post("/tours", verifyjwt, async (req, res) => {
+  const { title, description, startDate, endDate, user, photos } = req.body;
+  const newTour = new Tours({
+    title,
+    description,
+    startDate,
+    endDate,
+    user: req.user.id,
+    photos,
+  });
 
-})
+  try {
+    const saveTour = await newTour.save();
+    return res.json({
+      status: true,
+      message: "Tour created successfully",
+      data: saveTour,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error.message,
+      data: null,
+    });
+  }
+});
 
 app.post("/signup", async (req, res) => {
   const { name, email, mobile, city, country, password } = req.body;
@@ -144,13 +162,13 @@ app.post("/login", async (req, res) => {
     return res.json({
       status: true,
       message: "Login Successfully",
-      jwtToken:token,
+      jwtToken: token,
     });
   } else {
     return res.json({
       status: false,
       message: "Invalid Email or Password",
-      jwtToken:null,
+      jwtToken: null,
     });
   }
 });
