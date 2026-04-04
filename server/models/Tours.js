@@ -5,7 +5,7 @@ const tourSchems = new Schema({
   description: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  user: { tpye: Schema.Types.ObjectId, ref: "User", required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   photos:{type:[String],default:[]},
 });
 

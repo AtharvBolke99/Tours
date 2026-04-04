@@ -72,6 +72,26 @@ app.post("/tours", verifyjwt, async (req, res) => {
   }
 });
 
+app.get("/tours", verifyjwt, async (req, res) => {
+  try {
+    const tours = await Tours.find({ user: req.user.id }).populate(
+      "user",
+      "-password",
+    );
+    return res.json({
+      status: true,
+      message: "Tours fetched successfully",
+      data: tours,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error.message,
+      data: null,
+    });
+  }
+});
+
 app.post("/signup", async (req, res) => {
   const { name, email, mobile, city, country, password } = req.body;
 
