@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import User from "./models/User.js";
+import jwt from "jsonwebtoken";
 import cors from "cors";
 import bcrypt from "bcrypt";
 dotenv.config();
@@ -10,6 +11,26 @@ app.use(express.json());
 app.use(cors());
 
 const Port = process.env.PORT;
+
+
+const verifyjwt = (req,res, next) => {
+
+  const {authorization} = req.headers;
+  const token = authorization && authorization.split(" ")[1];
+  console.log(token);
+
+  
+  try{
+  const decoded = jwt.verify(token,process.env.JWT_SECRET);
+  next();
+  }catch(error){
+    return res.json({
+      status:false,
+      message:"Invalid or Missing Token",
+    })
+  }
+
+}
 
 app.get("/", (req, res) => {
   res.json({
@@ -24,6 +45,14 @@ app.get("/health", (req, res) => {
     message: "Server is Healthy",
   });
 });
+
+app.get("/api_v1", verifyjwt, (req , res) => {
+   return res.json({
+    status:true,
+    message:"API v1 is working",
+  })
+
+})
 
 app.post("/signup", async (req, res) => {
   const { name, email, mobile, city, country, password } = req.body;
@@ -61,7 +90,7 @@ app.post("/signup", async (req, res) => {
     mobile,
     city,
     country,
-    password : encryptedPassword,
+    password: encryptedPassword,
   });
 
   const exsistingUser = await User.findOne({ email });
@@ -90,7 +119,7 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const exsistingUser = await User.findOne({ email});
+  const exsistingUser = await User.findOne({ email });
 
   if (!exsistingUser) {
     return res.json({
@@ -99,20 +128,30 @@ app.post("/login", async (req, res) => {
     });
   }
 
-  const isCorrectPassword = bcrypt.compareSync(password, exsistingUser.password);
-  
+  const isCorrectPassword = bcrypt.compareSync(
+    password,
+    exsistingUser.password,
+  );
+
   exsistingUser.password = undefined;
 
-  if(isCorrectPassword) {
-    return res.json ({
-      status : true,
-      message : "Login Successfully",
-    })
+  if (isCorrectPassword) {
+    const token = jwt.sign(
+      { id: exsistingUser._id, email: exsistingUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
+    return res.json({
+      status: true,
+      message: "Login Successfully",
+      jwtToken:token,
+    });
   } else {
-    return res.json ({
-      status : false,
-      message  : "Invalid Email or Password",
-    })
+    return res.json({
+      status: false,
+      message: "Invalid Email or Password",
+      jwtToken:null,
+    });
   }
 });
 
