@@ -18,15 +18,9 @@ function Navbar() {
 
           {/* Navigation Buttons */}
           <div className="flex items-center space-x-4">
-            <Link to="login">
+            <Link to="/login">
               <button className="bg-gradient-to-r from-teal-400 to-green-500 hover:from-teal-500 hover:to-green-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
                 Login
-              </button>
-            </Link>
-
-            <Link to="/signup">
-              <button className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
-                Sign Up
               </button>
             </Link>
           </div>

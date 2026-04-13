@@ -1,3 +1,5 @@
+
+
 const gettours = async (req, res) => {
   try {
     const tours = await Tours.find({ user: req.user.id }).populate(

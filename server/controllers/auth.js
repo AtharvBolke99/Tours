@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
-import User from "./models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import User from "../models/User.js";
 
 dotenv.config();
 
 
 const signup = async (req, res) => {
-  const { name, email, mobile, city, country, password } = req.body;
+  const { name, email, mobile, city, country, password, profilePhoto } = req.body;
 
   if (!name) {
     res.json({
@@ -43,6 +43,7 @@ const signup = async (req, res) => {
     city,
     country,
     password: encryptedPassword,
+    profilePhoto,
   });
 
   const exsistingUser = await User.findOne({ email });

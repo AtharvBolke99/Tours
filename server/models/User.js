@@ -7,6 +7,10 @@ const newUserSchema = new Schema({
   city: { type: String },
   country: { type: String },
   password: { type: String, required: true },
+  profilePhoto: {
+    type: String,
+    default: "",
+  },
 });
 
 const User = model("User", newUserSchema);

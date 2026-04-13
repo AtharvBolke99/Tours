@@ -1,13 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import User from "./models/User.js";
 import Tours from "./models/Tours.js";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import { login, signup } from "./controllers/auth.js";
 import { gettours, posttours } from "./controllers/tours.js";
+import ImageKit from '@imagekit/nodejs';
+
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -32,6 +34,25 @@ const verifyjwt = (req, res, next) => {
     });
   }
 };
+
+
+const client = new ImageKit({
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,      
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,    
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,  
+});
+
+app.get("/auth", function (req, res) {
+  const { token, expire, signature } =
+    client.helper.getAuthenticationParameters();
+  res.send({
+    token,
+    expire,
+    signature,
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  });
+});
+
 
 app.get("/", (req, res) => {
   res.json({
