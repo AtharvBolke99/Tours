@@ -31,6 +31,11 @@ function Navbar() {
                     Add Tour
                   </button>
                 </Link>
+                <Link to="/mytours">
+                  <button className="bg-white text-[#0F172A] font-semibold py-2 px-5 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
+                    My Tours
+                  </button>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="bg-gradient-to-r from-teal-400 to-green-500 hover:from-teal-500 hover:to-green-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-md"

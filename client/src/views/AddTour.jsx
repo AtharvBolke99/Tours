@@ -25,60 +25,64 @@ function AddTour() {
     endDate: "",
   });
   const [photos, setPhotos] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const authenticator = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth`);
+      const response = await fetch(`http://localhost:8000/auth`);
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+        throw new Error(
+          `Request failed with status ${response.status}: ${errorText}`,
+        );
       }
       const data = await response.json();
-      if (!data.signature || !data.expire || !data.token || !data.publicKey) {
-        throw new Error("Invalid auth response from server");
-      }
-
-      return {
-        signature: data.signature,
-        token: data.token,
-        publicKey: data.publicKey,
-        expire: Number(data.expire),
-      };
+      const { signature, expire, token, publicKey } = data;
+      return { signature, expire, token, publicKey };
     } catch (error) {
       console.error("Authentication error:", error);
-      throw new Error("Image upload authentication failed.");
+      throw new Error("Authentication request failed");
     }
   };
-
   const handleUpload = async () => {
-    const fileInput = fileInputRef.current;
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      toast.error("Please select an image before uploading.");
+    if (!selectedFile) {
+      toast.error("Please select an image to upload.");
       return;
     }
 
-    const file = fileInput.files[0];
-    setProgress(0);
-
+    let authParams;
     try {
-      const { signature, token, publicKey, expire } = await authenticator();
+      authParams = await authenticator();
+    } catch (authError) {
+      console.error("Failed to authenticate for upload:", authError);
+      return;
+    }
+
+    const { signature, expire, token, publicKey } = authParams;
+    try {
       const uploadResponse = await upload({
-        file,
-        fileName: file.name,
-        publicKey,
-        signature,
-        token,
         expire,
+        token,
+        signature,
+        publicKey,
+        file: selectedFile,
+        fileName: selectedFile.name,
         onProgress: (event) => {
           setProgress(Math.round((event.loaded / event.total) * 100));
         },
       });
 
       setPhotos((prev) => [...prev, uploadResponse.url]);
+      setSelectedFile(null);
+      setPreviewUrl("");
+      setProgress(0);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       toast.success("Image uploaded successfully.");
-      fileInput.value = "";
     } catch (error) {
       if (error instanceof ImageKitAbortError) {
         console.error("Upload aborted:", error.reason);
@@ -95,6 +99,19 @@ function AddTour() {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
+    if (file) {
+      setPreviewUrl(URL.createObjectURL(file));
+    } else {
+      setPreviewUrl("");
+    }
+  };
+
+  const removePhoto = (index) => {
+    setPhotos((prev) => prev.filter((_, idx) => idx !== index));
+  };
   const createTour = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -103,7 +120,13 @@ function AddTour() {
       return;
     }
 
-    if (!tour.title || !tour.description || !tour.city || !tour.startDate || !tour.endDate) {
+    if (
+      !tour.title ||
+      !tour.description ||
+      !tour.city ||
+      !tour.startDate ||
+      !tour.endDate
+    ) {
       toast.error("Please fill in all required tour fields.");
       return;
     }
@@ -126,7 +149,13 @@ function AddTour() {
 
       if (response.data.status) {
         toast.success(response.data.message || "Tour created successfully");
-        setTour({ title: "", description: "", city: "", startDate: "", endDate: "" });
+        setTour({
+          title: "",
+          description: "",
+          city: "",
+          startDate: "",
+          endDate: "",
+        });
         setPhotos([]);
         setProgress(0);
         navigate("/");
@@ -186,28 +215,67 @@ function AddTour() {
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-[#0F172A]">Upload Tour Images</label>
+            <label className="text-sm font-medium text-[#0F172A]">
+              Upload Tour Images
+            </label>
             <input
               type="file"
               accept="image/*"
               ref={fileInputRef}
+              onChange={handleFileChange}
               className="border border-[#CBD5E1] rounded-xl p-2"
             />
+            {previewUrl && (
+              <div className="relative mt-3 w-full sm:w-64 rounded-2xl overflow-hidden border border-[#CBD5E1]">
+                <img
+                  src={previewUrl}
+                  alt="Selected upload preview"
+                  className="w-full h-40 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedFile(null);
+                    setPreviewUrl("");
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                  className="absolute top-2 right-2 bg-black/70 text-white rounded-full px-3 py-1 text-xs"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
             <div className="flex gap-3 items-center">
-              <Button title="Upload Image" onClick={handleUpload} variant="primary" />
-              <span className="text-sm text-gray-500">{progress > 0 ? `Upload progress: ${progress}%` : "No upload yet"}</span>
+              <Button
+                title="Upload Image"
+                onClick={handleUpload}
+                variant="primary"
+              />
+              <span className="text-sm text-gray-500">
+                {progress > 0
+                  ? `Upload progress: ${progress}%`
+                  : "No upload yet"}
+              </span>
             </div>
           </div>
 
           {photos.length > 0 && (
             <div className="grid gap-3 sm:grid-cols-3">
               {photos.map((photo, index) => (
-                <img
-                  key={index}
-                  src={photo}
-                  alt={`Tour upload ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-2xl border border-[#CBD5E1]"
-                />
+                <div key={index} className="relative group">
+                  <img
+                    src={photo}
+                    alt={`Tour upload ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-2xl border border-[#CBD5E1]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                    className="absolute top-2 right-2 bg-white/90 text-[#EF4444] px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
               ))}
             </div>
           )}
@@ -218,7 +286,11 @@ function AddTour() {
               onClick={createTour}
               variant="primary"
             />
-            <Button title="Back to Home" onClick={() => navigate("/")} variant="secondary" />
+            <Button
+              title="Back to Home"
+              onClick={() => navigate("/")}
+              variant="secondary"
+            />
           </div>
         </div>
       </div>
