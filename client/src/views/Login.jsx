@@ -34,7 +34,7 @@ function Login() {
       if(res.data.status == true) {
         localStorage.setItem("user", JSON.stringify(res.data));
         console.log(res.data);
-        localStorage.setItem("token", res.data.message.jwtToken);
+        localStorage.setItem("token", res.data.jwtToken);
         toast.success("Login Successful...");
         navigate("/");
         setLoginUser({ email: "", password: "" });

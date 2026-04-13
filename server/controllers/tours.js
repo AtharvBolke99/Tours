@@ -1,4 +1,4 @@
-
+import Tours from "../models/Tours.js";
 
 const gettours = async (req, res) => {
   try {
@@ -21,10 +21,11 @@ const gettours = async (req, res) => {
 };
 
 const posttours = async (req, res) => {
-  const { title, description, startDate, endDate, user, photos } = req.body;
+  const { title, description, city, startDate, endDate, photos } = req.body;
   const newTour = new Tours({
     title,
     description,
+    city,
     startDate,
     endDate,
     user: req.user.id,
