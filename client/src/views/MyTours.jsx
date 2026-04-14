@@ -57,7 +57,15 @@ function MyTours() {
             <div className="grid gap-6">
               {tours.map((tour) => (
                 <div key={tour._id} className="border border-[#CBD5E1] rounded-3xl p-5 bg-[#F8FAFC]">
-                  <h2 className="text-2xl font-semibold text-[#0F172A]">{tour.title}</h2>
+                  <div className="flex justify-between items-start mb-4">
+                    <h2 className="text-2xl font-semibold text-[#0F172A]">{tour.title}</h2>
+                    <button
+                      onClick={() => navigate(`/edittour/${tour._id}`)}
+                      className="bg-[#2563EB] text-white px-4 py-2 rounded-xl hover:bg-[#1D4ED8] transition-colors"
+                    >
+                      Edit Tour
+                    </button>
+                  </div>
                   <p className="text-gray-600 mt-2">{tour.description}</p>
                   <p className="mt-2 text-sm text-[#0F172A]">
                     <span className="font-semibold">City:</span> {tour.city || "Unknown"}
