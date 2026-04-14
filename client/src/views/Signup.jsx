@@ -111,7 +111,7 @@ function SignUp() {
   const createUser = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/signUp`,
+        `${import.meta.env.VITE_API_BASE_URL}/signup`,
         newUser,
       );
       if (response.data.status == true) {
