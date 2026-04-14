@@ -33,7 +33,12 @@ function Navbar() {
                 </Link>
                 <Link to="/mytours">
                   <button className="bg-white text-[#0F172A] font-semibold py-2 px-5 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
-                    My Tours
+                    Manage Tours
+                  </button>
+                </Link>
+                <Link to="/uploaded-tours">
+                  <button className="bg-white text-[#0F172A] font-semibold py-2 px-5 rounded-lg transition duration-300 transform hover:scale-105 shadow-md">
+                    Uploaded Tours
                   </button>
                 </Link>
                 <button
