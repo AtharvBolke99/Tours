@@ -44,11 +44,12 @@ const client = new ImageKit({
 
 app.get("/auth", function (req, res) {
   const { token, expire, signature } =
-    client.getAuthenticationParameters();
+    client.helper.getAuthenticationParameters();
   res.send({
     token,
     expire,
     signature,
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
   });
 });
 
