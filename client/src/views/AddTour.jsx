@@ -61,13 +61,12 @@ function AddTour() {
       return;
     }
 
-    const { signature, expire, token, publicKey } = authParams;
+    const { signature, expire, token } = authParams;
     try {
       const uploadResponse = await upload({
         expire,
         token,
         signature,
-        publicKey,
         file: selectedFile,
         fileName: selectedFile.name,
         onProgress: (event) => {
