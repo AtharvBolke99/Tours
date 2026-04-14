@@ -20,6 +20,26 @@ const gettours = async (req, res) => {
   }
 };
 
+const getAllTours = async (req, res) => {
+  try {
+    const tours = await Tours.find({}).populate(
+      "user",
+      "-password",
+    );
+    return res.json({
+      status: true,
+      message: "All tours fetched successfully",
+      data: tours,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 const posttours = async (req, res) => {
   const { title, description, city, startDate, endDate, photos } = req.body;
   const newTour = new Tours({
@@ -84,4 +104,4 @@ const updatetours = async (req, res) => {
   }
 };
 
-export {gettours, posttours, updatetours};
+export {gettours, posttours, updatetours, getAllTours};

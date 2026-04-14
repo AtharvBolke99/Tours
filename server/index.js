@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import { login, signup } from "./controllers/auth.js";
-import { gettours, posttours, updatetours } from "./controllers/tours.js";
+import { gettours, posttours, updatetours, getAllTours } from "./controllers/tours.js";
 import ImageKit from '@imagekit/nodejs';
 
 
@@ -71,6 +71,8 @@ app.get("/health", (req, res) => {
 app.post("/tours", verifyjwt, posttours);
 
 app.get("/tours", verifyjwt, gettours);
+
+app.get("/all-tours", verifyjwt, getAllTours);
 
 app.put("/tours/:id", verifyjwt, updatetours);
 

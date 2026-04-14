@@ -18,7 +18,7 @@ function UploadedTours() {
       }
 
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/tours`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/all-tours`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -45,16 +45,16 @@ function UploadedTours() {
       <Navbar />
       <div className="max-w-6xl mx-auto mt-10 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl shadow-xl border border-[#CBD5E1] p-6">
-          <h1 className="text-3xl font-bold text-[#0F172A] mb-4">Uploaded Tours</h1>
+          <h1 className="text-3xl font-bold text-[#0F172A] mb-4">All Uploaded Tours</h1>
           <p className="text-sm text-gray-500 mb-6">
-            This page shows all tours you have uploaded.
-            These tours are read-only and cannot be edited from here.
+            This page shows all tours uploaded by users on the platform.
+            These tours are read-only and cannot be edited.
           </p>
 
           {loading && <p className="text-gray-500">Loading tours...</p>}
 
           {!loading && tours.length === 0 && (
-            <p className="text-gray-500">You have no uploaded tours yet.</p>
+            <p className="text-gray-500">No tours have been uploaded yet.</p>
           )}
 
           {!loading && tours.length > 0 && (
@@ -63,6 +63,9 @@ function UploadedTours() {
                 <div key={tour._id} className="border border-[#CBD5E1] rounded-3xl p-5 bg-[#F8FAFC]">
                   <h2 className="text-2xl font-semibold text-[#0F172A]">{tour.title}</h2>
                   <p className="text-gray-600 mt-2">{tour.description}</p>
+                  <p className="mt-2 text-sm text-[#0F172A]">
+                    <span className="font-semibold">Uploaded by:</span> {tour.user?.name || "Unknown"}
+                  </p>
                   <p className="mt-2 text-sm text-[#0F172A]">
                     <span className="font-semibold">City:</span> {tour.city || "Unknown"}
                   </p>
