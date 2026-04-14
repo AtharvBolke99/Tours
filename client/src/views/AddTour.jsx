@@ -40,8 +40,8 @@ function AddTour() {
         );
       }
       const data = await response.json();
-      const { signature, expire, token, publicKey } = data;
-      return { signature, expire, token, publicKey };
+      const { signature, expire, token } = data;
+      return { signature, expire, token };
     } catch (error) {
       console.error("Authentication error:", error);
       throw new Error("Authentication request failed");
