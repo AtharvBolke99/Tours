@@ -48,4 +48,40 @@ const posttours = async (req, res) => {
   }
 };
 
-export {gettours, posttours};
+const updatetours = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, city, startDate, endDate, photos } = req.body;
+
+  try {
+    const tour = await Tours.findOne({ _id: id, user: req.user.id });
+    if (!tour) {
+      return res.json({
+        status: false,
+        message: "Tour not found or you don't have permission to edit it",
+        data: null,
+      });
+    }
+
+    tour.title = title || tour.title;
+    tour.description = description || tour.description;
+    tour.city = city || tour.city;
+    tour.startDate = startDate || tour.startDate;
+    tour.endDate = endDate || tour.endDate;
+    tour.photos = photos || tour.photos;
+
+    const updatedTour = await tour.save();
+    return res.json({
+      status: true,
+      message: "Tour updated successfully",
+      data: updatedTour,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
+export {gettours, posttours, updatetours};
