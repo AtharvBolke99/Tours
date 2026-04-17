@@ -4,7 +4,7 @@ const PhotoPreview = ({ previewUrl, onRemove, className = "" }) => {
   if (!previewUrl) return null;
 
   return (
-    <div className={`relative mt-3 w-full sm:w-64 rounded-2xl overflow-hidden border border-[#CBD5E1] ${className}`}>
+    <div className={`relative mt-3 w-full sm:w-64 rounded-2xl overflow-hidden border border-surface ${className}`}>
       <img
         src={previewUrl}
         alt="Selected upload preview"

@@ -46,17 +46,17 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen page-bg transition-colors duration-300">
       <Navbar />
 
       <div className="mt-10 text-center">
-        <h1 className="text-4xl font-bold text-[#0F172A]">Welcome Back</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-4xl font-bold text-primary">Welcome Back</h1>
+        <p className="text-sm text-muted mt-1">
           Login to continue your journey
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 w-[90%] md:w-[420px] border border-[#CBD5E1] rounded-xl shadow-xl mx-auto mt-10 p-6 bg-white">
+      <div className="flex flex-col gap-4 w-[90%] md:w-[420px] border border-surface rounded-xl shadow-xl mx-auto mt-10 p-6 surface">
         <Input
           type="email"
           placeholder="Enter your email"

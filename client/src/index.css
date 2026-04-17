@@ -1,1 +1,109 @@
 @import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-muted: #e2e8f0;
+  --hero-from: rgba(238, 242, 255, 0.22);
+  --hero-to: rgba(59, 130, 246, 0.16);
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #cbd5e1;
+  --panel: rgba(255, 255, 255, 0.75);
+  --btn-secondary-bg: #f8fafc;
+  --btn-secondary-text: #0f172a;
+  --btn-secondary-border: #cbd5e1;
+  --navbar-bg: linear-gradient(90deg, rgba(139, 92, 246, 0.95), rgba(59, 130, 246, 0.95));
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #020617;
+  --surface: #0f172a;
+  --surface-muted: #111827;
+  --hero-from: rgba(67, 56, 202, 0.25);
+  --hero-to: rgba(14, 165, 233, 0.2);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #334155;
+  --panel: rgba(15, 23, 42, 0.88);
+  --btn-secondary-bg: #0f172a;
+  --btn-secondary-text: #e2e8f0;
+  --btn-secondary-border: #334155;
+  --navbar-bg: linear-gradient(90deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.96));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-bg {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.surface {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.surface-muted {
+  background-color: var(--surface-muted);
+  color: var(--text);
+}
+
+.hero-gradient {
+  background-image: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+
+.navbar-theme {
+  background: var(--navbar-bg);
+}
+
+.border-surface {
+  border-color: var(--border);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.btn-secondary-custom {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border-color: var(--btn-secondary-border);
+}
+
+.btn-secondary-custom:hover {
+  background-color: rgba(255, 255, 255, 0.92);
+}
+
+.dark .btn-secondary-custom:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.input-field {
+  background-color: var(--btn-secondary-bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.input-field:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.16);
+}
+
+.theme-toggle {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+}

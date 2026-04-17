@@ -245,20 +245,20 @@ function TourForm() {
 
   if (initialLoading) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC]">
+      <div className="min-h-screen page-bg transition-colors duration-300">
         <Navbar />
         <div className="max-w-3xl mx-auto mt-10 p-6">
-          <div className="text-center">Loading tour...</div>
+          <div className="text-center text-muted">Loading tour...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen page-bg transition-colors duration-300">
       <Navbar />
-      <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-xl border border-[#CBD5E1]">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-4">
+      <div className="max-w-3xl mx-auto mt-10 p-6 surface rounded-3xl shadow-xl border border-surface">
+        <h1 className="text-3xl font-bold text-primary mb-4">
           {isEditMode ? "Edit Tour" : "Add New Tour"}
         </h1>
 
@@ -275,14 +275,7 @@ function TourForm() {
             placeholder="Tour Description"
             value={tour.description}
             onChange={(e) => setTour({ ...tour, description: e.target.value })}
-            className="border border-[#CBD5E1] rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-          />
-
-          <Input
-            type="text"
-            placeholder="City"
-            value={tour.city}
-            onChange={(e) => setTour({ ...tour, city: e.target.value })}
+              className="input-field rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
           />
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -301,7 +294,7 @@ function TourForm() {
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium text-[#0F172A]">
+            <label className="text-sm font-medium text-primary">
               Upload Tour Images
             </label>
             <input
@@ -309,7 +302,7 @@ function TourForm() {
               accept="image/*"
               ref={fileInputRef}
               onChange={handleFileChange}
-              className="border border-[#CBD5E1] rounded-xl p-2"
+              className="input-field rounded-xl p-2"
             />
             <PhotoPreview
               previewUrl={previewUrl}
@@ -321,7 +314,7 @@ function TourForm() {
                 onClick={handleUpload}
                 variant="primary"
               />
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-muted">
                 {progress > 0
                   ? `Upload progress: ${progress}%`
                   : "No upload yet"}
@@ -336,7 +329,7 @@ function TourForm() {
                   <img
                     src={photo}
                     alt={`Tour upload ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-2xl border border-[#CBD5E1]"
+                    className="w-full h-32 object-cover rounded-2xl border border-surface"
                   />
                   <button
                     type="button"

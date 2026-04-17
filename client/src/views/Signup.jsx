@@ -136,11 +136,11 @@ function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen page-bg transition-colors duration-300">
       <Navbar />
 
-      <div className="flex flex-col gap-3 w-[90%] border border-2 border-[#CBD5E1] rounded-xl m-5 shadow-2xl justify-center items-center mx-auto md:p-8 p-5">
-        <h1 className="text-[#0F172A] my-2 text-2xl font-bold">
+      <div className="flex flex-col gap-3 w-[90%] border-2 border-surface rounded-xl m-5 shadow-2xl justify-center items-center mx-auto md:p-8 p-5 surface">
+        <h1 className="text-primary my-2 text-2xl font-bold">
           Create Account
         </h1>
 
@@ -208,7 +208,7 @@ function SignUp() {
         />
 
         {progress > 0 && (
-          <p className="text-sm text-gray-500">Uploading: {progress}%</p>
+          <p className="text-sm text-muted">Uploading: {progress}%</p>
         )}
 
         <Button title="Sign Up" onClick={createUser} />

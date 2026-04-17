@@ -1,10 +1,9 @@
 import React from 'react'
 
-
 function Button({variant="primary", size="lg", title, onClick}) {
   const variants = {
     primary: "bg-[#2563EB] hover:bg-[#1E40AF] text-white",
-    secondary: "bg-[#F8FAFC] hover:bg-[#E2E8F0] text-[#0F172A] border border-[#CBD5E1]",
+    secondary: "btn-secondary-custom border",
     danger: "bg-[#EF4444] hover:bg-[#DC2626] text-white",
   }
 
@@ -14,9 +13,8 @@ function Button({variant="primary", size="lg", title, onClick}) {
     lg: "text-lg px-6 py-3",
   }
   return (
-    
-     <button
-     onClick={onClick}
+    <button
+      onClick={onClick}
       className={`
         ${variants[variant]}
         ${sizes[size]}
@@ -27,7 +25,7 @@ function Button({variant="primary", size="lg", title, onClick}) {
         cursor-pointer
       `}
     >
-{title}
+      {title}
     </button>
   )
 }

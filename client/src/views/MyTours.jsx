@@ -41,24 +41,24 @@ function MyTours() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen page-bg transition-colors duration-300">
       <Navbar />
       <div className="max-w-6xl mx-auto mt-10 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl shadow-xl border border-[#CBD5E1] p-6">
-          <h1 className="text-3xl font-bold text-[#0F172A] mb-4">Your Tours</h1>
+        <div className="surface rounded-3xl shadow-xl border border-surface p-6">
+          <h1 className="text-3xl font-bold text-primary mb-4">Your Tours</h1>
 
-          {loading && <p className="text-gray-500">Loading tours...</p>}
+          {loading && <p className="text-muted">Loading tours...</p>}
 
           {!loading && tours.length === 0 && (
-            <p className="text-gray-500">You have no tours yet. Click Add Tour to create one.</p>
+            <p className="text-muted">You have no tours yet. Click Add Tour to create one.</p>
           )}
 
           {!loading && tours.length > 0 && (
             <div className="grid gap-6">
               {tours.map((tour) => (
-                <div key={tour._id} className="border border-[#CBD5E1] rounded-3xl p-5 bg-[#F8FAFC]">
+                <div key={tour._id} className="border border-surface rounded-3xl p-5 surface">
                   <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-2xl font-semibold text-[#0F172A]">{tour.title}</h2>
+                    <h2 className="text-2xl font-semibold text-primary">{tour.title}</h2>
                     <button
                       onClick={() => navigate(`/edittour/${tour._id}`)}
                       className="bg-[#2563EB] text-white px-4 py-2 rounded-xl hover:bg-[#1D4ED8] transition-colors"
@@ -66,11 +66,11 @@ function MyTours() {
                       Edit Tour
                     </button>
                   </div>
-                  <p className="text-gray-600 mt-2">{tour.description}</p>
-                  <p className="mt-2 text-sm text-[#0F172A]">
+                  <p className="text-muted mt-2">{tour.description}</p>
+                  <p className="mt-2 text-sm text-primary">
                     <span className="font-semibold">City:</span> {tour.city || "Unknown"}
                   </p>
-                  <p className="mt-3 text-sm text-[#0F172A]">
+                  <p className="mt-3 text-sm text-primary">
                     <span className="font-semibold">Start:</span> {new Date(tour.startDate).toLocaleDateString()}
                     <span className="mx-2">•</span>
                     <span className="font-semibold">End:</span> {new Date(tour.endDate).toLocaleDateString()}
@@ -82,7 +82,7 @@ function MyTours() {
                           key={index}
                           src={photo}
                           alt={`${tour.title} ${index + 1}`}
-                          className="w-full sm:w-48 h-32 object-cover rounded-2xl border border-[#CBD5E1]"
+                          className="w-full sm:w-48 h-32 object-cover rounded-2xl border border-surface"
                         />
                       ))}
                     </div>
